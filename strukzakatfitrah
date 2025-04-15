@@ -1,0 +1,73 @@
+import openpyxl
+from openpyxl import Workbook
+
+riwayat_transaksi = []
+
+def transaksi_zakat():
+    print("=== Sistem Transaksi Zakat Fitrah ===\n")
+
+    nama = input("Masukkan Nama Muzakki: ")
+    print("Pilih Jenis Zakat:")
+    print("1. Uang (Rp47.000/orang)")
+    print("2. Beras (3.5 liter/orang)")
+    jenis = input("Masukkan pilihan (1/2): ")
+
+    if jenis not in ['1', '2']:
+        print("⚠️ Pilihan tidak valid!")
+        return
+
+    jumlah_keluarga = int(input("Masukkan jumlah anggota keluarga: "))
+
+    if jenis == "1":
+        nilai_zakat = 47000
+        satuan = "Rp"
+        total_zakat = jumlah_keluarga * nilai_zakat
+    else:
+        nilai_zakat = 3.5
+        satuan = "Liter"
+        total_zakat = jumlah_keluarga * nilai_zakat
+
+    print(f"\nTotal zakat yang harus dibayar: {satuan} {total_zakat} ")
+
+    if jenis == "1":
+        total_bayar = float(input("Masukkan jumlah yang dibayarkan (Rp): "))
+        kembalian = total_bayar - total_zakat
+        print("\n🧾 STRUK ZAKAT FITRAH")
+        print(f"Nama Muzakki        : {nama}")
+        print(f"Jenis Zakat         : Uang (Rp47.000/orang)")
+        print(f"Jumlah Keluarga     : {jumlah_keluarga}")
+        print(f"Total Bayar Zakat   : Rp{total_zakat:,.0f}")
+        print(f"Total Bayar Anda    : Rp{total_bayar:,.0f}")
+        print(f"Kembalian           : Rp{kembalian:,.0f}" if kembalian >= 0 else f"Kekurangan       : Rp{-kembalian:,.0f}")
+        riwayat_transaksi.append([nama, "Uang", jumlah_keluarga, total_zakat, total_bayar, kembalian])
+    else:
+        print("\n🧾 STRUK ZAKAT FITRAH")
+        print(f"Nama Muzakki        : {nama}")
+        print(f"Jenis Zakat         : Beras (3.5 liter/orang)")
+        print(f"Jumlah Keluarga     : {jumlah_keluarga}")
+        print(f"Total Bayar Zakat   : {total_zakat:.2f} liter")
+        print("Silakan serahkan beras sesuai total di atas.")
+        riwayat_transaksi.append([nama, "Beras", jumlah_keluarga, total_zakat, "-", "-"])
+
+def lihat_transaksi():
+    if not riwayat_transaksi:
+        print("\n📭 Belum ada transaksi zakat.")
+        return
+
+    print("\n📄 DAFTAR TRANSAKSI ZAKAT")
+    print("-" * 60)
+    print(f"{'Nama':<15} {'Jenis':<10} {'Jml':<5} {'Total':<10} {'Bayar':<10} {'Kembali'}")
+    print("-" * 60)
+    for data in riwayat_transaksi:
+        print(f"{data[0]:<15} {data[1]:<10} {data[2]:<5} {data[3]:<10} {data[4]:<10} {data[5]}")
+    print("-" * 60)
+
+def export_ke_excel():
+    if not riwayat_transaksi:
+        print("\n❗ Tidak ada data untuk diekspor.")
+        return
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Transaksi Zakat"
+    
