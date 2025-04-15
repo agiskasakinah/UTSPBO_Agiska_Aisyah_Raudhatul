@@ -1,0 +1,34 @@
+import openpyxl
+from openpyxl import Workbook
+
+riwayat_transaksi = []
+
+def transaksi_zakat():
+    print("=== Sistem Transaksi Zakat Fitrah ===\n")
+
+    nama = input("Masukkan Nama Muzakki: ")
+    print("Pilih Jenis Zakat:")
+    print("1. Uang (Rp47.000/orang)")
+    print("2. Beras (3.5 liter/orang)")
+    jenis = input("Masukkan pilihan (1/2): ")
+
+    if jenis not in ['1', '2']:
+        print("⚠️ Pilihan tidak valid!")
+        return
+
+    jumlah_keluarga = int(input("Masukkan jumlah anggota keluarga: "))
+
+    if jenis == "1":
+        nilai_zakat = 47000
+        satuan = "Rp"
+        total_zakat = jumlah_keluarga * nilai_zakat
+    else:
+        nilai_zakat = 3.5
+        satuan = "Liter"
+        total_zakat = jumlah_keluarga * nilai_zakat
+
+    print(f"\nTotal zakat yang harus dibayar: {satuan} {total_zakat} ")
+
+    if jenis == "1":
+        total_bayar = float(input("Masukkan jumlah yang dibayarkan (Rp): "))
+        kembalian = total_bayar - total_zakat
